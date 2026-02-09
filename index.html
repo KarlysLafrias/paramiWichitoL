@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Valentín 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  color:white;
+  background:
+    radial-gradient(circle at 20% 30%,#ff4d9d55,transparent 40%),
+    radial-gradient(circle at 80% 60%,#6a00ff55,transparent 40%),
+    radial-gradient(circle at 50% 90%,#00d4ff44,transparent 40%),
+    #000;
+}
+
+/* estrellas */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:url("https://www.transparenttextures.com/patterns/stardust.png");
+  opacity:.35;
+  animation: stars 120s linear infinite;
+}
+@keyframes stars{
+  to{background-position:8000px 4000px;}
+}
+
+/* propuesta */
+.container{
+  background:rgba(0,0,0,.55);
+  padding:25px 30px;
+  border-radius:20px;
+  text-align:center;
+  backdrop-filter:blur(6px);
+  box-shadow:0 0 25px rgba(255,0,100,.5);
+  max-width:90vw;
+  z-index:2;
+}
+
+h1{
+  font-family:'Dancing Script',cursive;
+  font-size:clamp(28px,5vw,42px);
+  margin-bottom:20px;
+  text-shadow:0 0 20px #ff2a6d;
+}
+
+button{
+  border:none;
+  padding:12px 28px;
+  margin:10px;
+  font-size:17px;
+  border-radius:40px;
+  cursor:pointer;
+  background:linear-gradient(45deg,#ff2a6d,#8b0036);
+  color:white;
+  box-shadow:0 0 15px #ff2a6d;
+}
+
+/* final */
+.final{
+  position:fixed;
+  inset:0;
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:25px;
+  z-index:10;
+}
+
+.galaxy-video{
+  width:260px;
+  height:260px;
+  border-radius:50%;
+}
+
+.galaxy-video video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+  mix-blend-mode:lighten;
+  opacity:.9;
+  filter:
+    brightness(1.4)
+    saturate(1.6)
+    blur(.3px)
+    drop-shadow(0 0 50px rgba(150,120,255,.8));
+}
+
+.final-text{
+  font-family:'Dancing Script';
+  font-size:26px;
+  text-align:center;
+  text-shadow:0 0 20px #ff2a6d;
+}
+
+/* confeti y besos */
+.floating{
+  position:fixed;
+  top:-40px;
+  font-size:22px;
+  animation: fall linear forwards;
+  pointer-events:none;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(360deg);
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- PROPUESTA -->
+<div class="container" id="main">
+  <h1>¿Quieres ser mi San Valentín amorcito?</h1>
+  <button onclick="yes()">Sí mi novia hermosa 💘</button>
+  <button id="noBtn">No, me caes mall🙈</button>
+</div>
+
+<!-- FINAL -->
+<div class="final" id="final">
+  <div class="galaxy-video">
+    <video src="galaxy-heart.mp4" autoplay loop muted playsinline></video>
+  </div>
+  <div class="final-text">
+    Sabía que dirías que sí jijjijia 💖<br>
+    Te amo mucho mi wichito hermoso🩷<br>
+    Eres mi felicidaaaddd, me encantas ya besame 💋
+  </div>
+</div>
+
+<audio id="kissSound"
+  src="https://cdn.pixabay.com/audio/2022/03/15/audio_7e38a3e7f6.mp3">
+</audio>
+<audio id="music" src="musica.mp3" loop></audio>
+
+<script>
+/* AUDIO */
+const music = document.getElementById("music");
+music.volume = 0.8;
+
+/* BOTÓN NO QUE HUYE SOLO DENTRO DEL CONTENEDOR */
+const noBtn = document.getElementById("noBtn");
+const container = document.getElementById("main");
+
+noBtn.addEventListener("mouseover", moverNo);
+noBtn.addEventListener("click", moverNo);
+
+function moverNo(){
+  const rect = container.getBoundingClientRect();
+
+  const maxX = rect.width - noBtn.offsetWidth;
+  const maxY = rect.height - noBtn.offsetHeight;
+
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
+
+/* CUANDO DICE SÍ */
+function yes(){
+  if(music){
+    music.volume = 0.8;
+    music.play().catch(()=>{});
+  }
+
+  document.getElementById("main").style.display = "none";
+  document.getElementById("final").style.display = "flex";
+
+  lanzarConfeti();
+  lanzarBesos();
+}
+
+/* CONFETI LIGERO (OPTIMIZADO PARA MÓVIL) */
+function lanzarConfeti(){
+  setInterval(()=>{
+    for(let i=0;i<6;i++){
+      const c = document.createElement("div");
+
+      c.style.position = "fixed";
+      c.style.left = Math.random()*100+"vw";
+      c.style.top = "-10px";
+      c.style.width = "7px";
+      c.style.height = "7px";
+      c.style.borderRadius = "50%";
+      c.style.background = `hsl(${Math.random()*360},100%,70%)`;
+      c.style.zIndex = 9999;
+      c.style.pointerEvents = "none";
+
+      document.body.appendChild(c);
+
+      c.animate([
+        { transform:"translateY(0)", opacity:1 },
+        {
+          transform:`translateY(${innerHeight}px) rotate(360deg)`,
+          opacity:0
+        }
+      ],{
+        duration:4000 + Math.random()*2000,
+        easing:"linear"
+      }).onfinish = ()=>c.remove();
+    }
+  }, 700); // lluvia constante
+
+}
+
+/* BESOS FLOTANDO */
+function lanzarBesos(){
+  const heart = document.querySelector(".galaxy-video");
+  const rect = heart.getBoundingClientRect();
+  const kiss = document.getElementById("kissSound");
+  if(kiss){
+  kiss.currentTime = 0;
+  kiss.play().catch(()=>{});
+}
+
+  setInterval(()=>{
+    const b = document.createElement("div");
+    b.textContent = "💋";
+
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+
+    b.style.position = "fixed";
+    b.style.left = x + "px";
+    b.style.top = y + "px";
+    b.style.fontSize = "28px";
+    b.style.zIndex = 9999;
+    b.style.pointerEvents = "none";
+
+    document.body.appendChild(b);
+
+    b.animate([
+      { transform:"translate(-50%, -50%) scale(1)", opacity:1 },
+      {
+        transform:`translate(${(Math.random()-0.5)*200}px, -300px) scale(1.4)`,
+        opacity:0
+      }
+    ],{
+      duration:2500 + Math.random()*1500,
+      easing:"ease-out"
+    }).onfinish = ()=>b.remove();
+
+  }, 500); // cada medio segundo
+
+}
+</script>
+
+</body>
+</html>
